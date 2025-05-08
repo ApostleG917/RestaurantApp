@@ -43,6 +43,7 @@ BACKEND:
 JWT_SECRET=supersecretkey 
 
 backend.js:
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -62,6 +63,7 @@ if (!SECRET_KEY) {
 }
 
 // Middleware
+
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
@@ -70,6 +72,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Database connection
+
 const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
@@ -81,6 +84,7 @@ const db = mysql.createPool({
 });
 
 // Check Database Connection
+
 db.getConnection()
     .then(() => console.log('✅ Connected to the database'))
     .catch(err => {
@@ -89,6 +93,7 @@ db.getConnection()
     });
 
 // Εγγραφή χρήστη
+
 app.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -108,6 +113,7 @@ app.post('/register', async (req, res) => {
         const token = jwt.sign({ userId, name, email }, SECRET_KEY, { expiresIn: '1h' });
 
         // Για τοπικό περιβάλλον, secure: false, για παραγωγή secure: true.
+        
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'None' });
         return res.status(201).json({ message: 'Επιτυχής εγγραφή!', token });
     } catch (error) {
@@ -117,6 +123,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Σύνδεση χρήστη (Login)
+
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -146,6 +153,7 @@ app.post('/login', async (req, res) => {
 });
 
 // Endpoint για αναζήτηση εστιατορίων
+
 app.get('/restaurants', async (req, res) => {
     try {
         const { name = '', location = '' } = req.query;
@@ -171,6 +179,7 @@ app.get('/restaurants', async (req, res) => {
 });
 
 // Backend endpoint για κρατήσεις (GET)
+
 app.get('/reservations', async (req, res) => {
     try {
       const token = req.headers.authorization?.split(' ')[1];
@@ -225,6 +234,7 @@ app.get('/reservations', async (req, res) => {
 
 
 // Server startup
+
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
@@ -232,6 +242,7 @@ app.listen(PORT, () => {
 FRONTEND
 
 App.css:
+
 /* App.css */
 body {
   font-family: 'Poppins', sans-serif;
@@ -294,10 +305,12 @@ img {
 }
 
 App.js:
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css'; // Εισαγωγή του CSS
 // Εισαγωγή των Components
+
 import Register from './Register';
 import Login from './Login';
 import UserProfile from './UserProfile';
@@ -346,6 +359,7 @@ const App = () => {
 export default App;
 
 Login.js:
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -412,6 +426,7 @@ const Login = () => {
 export default Login;
 
 UserProfile.js:
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -503,6 +518,7 @@ const UserProfile = () => {
 export default UserProfile;
 
 RestaurantList.js:
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -582,6 +598,7 @@ const RestaurantList = () => {
 export default RestaurantList;
 
 BookingForm.js:
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -638,6 +655,7 @@ const BookingForm = () => {
       console.error('Σφάλμα κατά την κράτηση:', error);
   
       // Χειρισμός του σφάλματος
+      
       if (error.response) {
         setMessage(error.response?.data?.error || 'Σφάλμα κατά την κράτηση.');
       } else {
@@ -689,6 +707,7 @@ const BookingForm = () => {
 export default BookingForm;
 
 Register.js:
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
